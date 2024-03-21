@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/tamilchiran/nebula-api/api/internal/service/comics"
 )
@@ -13,7 +14,12 @@ func main() {
 	// Register the handler function for a specific route
 	http.HandleFunc("/article", comics.PublishArticle)
 
-	// Start the HTTP server on port 8080
-	fmt.Println("Server listening on port 8080...")
-	http.ListenAndServe(":8080", nil)
+	// Determine port for HTTP service.
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("defaulting to port %s", port)
+	}
+
+	http.ListenAndServe(":"+port, nil)
 }
